@@ -17,22 +17,37 @@ specific language governing permissions and limitations
 under the License.
 */
 
-package com.drakeconuslting.big_data_maker
+package com.drakeconsulting.big_data_maker
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
-import org.apache.spark.sql.types.{DataType, StructField, StringType}
+import org.apache.spark.sql.types.{DataType, StructField, StringType, LongType, DoubleType}
+import java.util.Random
 
 abstract class AbstractCol(val name: String, val dataType:DataType, val nullable:Boolean = true) extends Serializable {
+  val random = new Random(123)
   def getStructField(): StructField = {
     new StructField(name, dataType, nullable)
   }
   def getValue(index: Integer):Any
+
 }
 
 class StringConstant(name: String, val constant:String) extends AbstractCol(name, StringType, nullable=false) {
   override def getValue(index: Integer): String = {
     constant
+  }
+}
+
+class RandomLong(name: String, val maxValue:Long) extends AbstractCol(name, LongType, nullable=false) {
+  override def getValue(index: Integer): Long = {
+    (random.nextDouble * maxValue).toLong
+  }
+}
+
+class RandomDouble(name: String, val maxValue:Double) extends AbstractCol(name, DoubleType, nullable=false) {
+  override def getValue(index: Integer): Double = {
+    random.nextDouble * maxValue
   }
 }
 
