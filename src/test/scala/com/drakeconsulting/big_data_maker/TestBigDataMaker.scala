@@ -1,4 +1,4 @@
-package com.drakeconuslting.big_data_maker
+package com.drakeconsulting.big_data_maker
 
 import org.scalatest.FunSuite
 import com.holdenkarau.spark.testing.SharedSparkContext
