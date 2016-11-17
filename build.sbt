@@ -9,9 +9,12 @@ val sparkVersion = "1.6.2"
 libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
 
+libraryDependencies += "com.github.scopt" %% "scopt" % "3.5.0"
+
+
 //test
 libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "1.6.1_0.3.3" % "test"
-//libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 
 resolvers += Resolver.sonatypeRepo("public")
 
