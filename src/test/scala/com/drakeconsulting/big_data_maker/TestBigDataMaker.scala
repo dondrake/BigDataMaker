@@ -16,5 +16,15 @@ class BigDataMakerTest extends FunSuite with SharedSparkContext {
     assert(500 === df.count)
     assert(2 === df.columns.length)
   }
+
+  test("col names") {
+    val sqlContext = new SQLContext(sc)
+    val bd = new BigData(sqlContext, "/tmp/b", 5, 100)
+    bd.addColumn(new StringConstant("f1", "abc"))
+    bd.addColumn(new StringConstant("", "def"))
+
+    assert("f1" === bd.cols(0).name)
+    assert("f_1" === bd.cols(1).name)
+  }
 }
   

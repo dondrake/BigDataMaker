@@ -24,7 +24,7 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.types.{DataType, StructField, StringType, LongType, DoubleType}
 import java.util.Random
 
-abstract class AbstractCol(val name: String, val dataType:DataType, val nullable:Boolean = true) extends Serializable {
+abstract class AbstractCol(var name: String, val dataType:DataType, val nullable:Boolean = true) extends Serializable {
   val random = new Random(123)
   def getStructField(): StructField = {
     new StructField(name, dataType, nullable)

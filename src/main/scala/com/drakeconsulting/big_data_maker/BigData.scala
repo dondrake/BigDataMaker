@@ -29,6 +29,10 @@ class BigData(val sqlContext:SQLContext, val filename: String, val numPartitions
   val distData = sqlContext.sparkContext.parallelize(Seq[Int](), numPartitions)
 
   def addColumn(col: AbstractCol) {
+    // If the Column doesn't have a name, auto-assign one
+    if (col.name == "") {
+      col.name = "f_" + cols.length.toString
+    }
     cols = cols :+ col
   }
 
