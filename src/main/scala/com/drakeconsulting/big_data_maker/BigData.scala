@@ -21,43 +21,44 @@ package com.drakeconsulting.big_data_maker
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql._
+import org.apache.spark.sql.types._
 
 class BigData(val sqlContext:SQLContext, val filename: String, val numPartitions:Integer, val numRowsPerPartition:Integer) extends Serializable {
-    var cols = Seq[AbstractCol]()
-    var df: org.apache.spark.sql.DataFrame = _
-    val distData = sqlContext.sparkContext.parallelize(Seq[Int](), numPartitions)
-    
-    def addColumn(col: AbstractCol) {
-        cols = cols :+ col
-    }
-    
-    def createRow(index: Integer): org.apache.spark.sql.Row = {
-        org.apache.spark.sql.Row.fromSeq(cols.map(x => {
-            x.getValue(index)
-        }))
-    }
+  var cols = Seq[AbstractCol]()
+  var df: org.apache.spark.sql.DataFrame = _
+  val distData = sqlContext.sparkContext.parallelize(Seq[Int](), numPartitions)
 
-    def _createSchema(): org.apache.spark.sql.types.StructType = {
-        org.apache.spark.sql.types.StructType(cols.map(x => {
-            org.apache.spark.sql.types.StructField(x.name, x.dataType)
-        }))
-    }
-    
-    def _createRDD() = {
-        distData.mapPartitionsWithIndex((index, iter) => {
-            (1 to numRowsPerPartition).map(_ => {
-                createRow(index)
-            }).iterator
-        })
-    }
-    
-    def _createDataFrame(): org.apache.spark.sql.DataFrame = {
-        df = sqlContext.createDataFrame(_createRDD, _createSchema)
-        df
-    }
-    
-    def writeFile() {
-        _createDataFrame()
-        df.write.mode("overwrite").parquet(filename)
-    }
+  def addColumn(col: AbstractCol) {
+    cols = cols :+ col
+  }
+
+  def createRow(index: Integer): Row = {
+    Row.fromSeq(cols.map(x => {
+      x.getValue(index)
+    }))
+  }
+
+  def _createSchema(): StructType = {
+    StructType(cols.map(x => {
+      StructField(x.name, x.dataType)
+    }))
+  }
+
+  def _createRDD() = {
+    distData.mapPartitionsWithIndex((index, iter) => {
+      (1 to numRowsPerPartition).map(_ => {
+        createRow(index)
+      }).iterator
+    })
+  }
+
+  def _createDataFrame(): DataFrame = {
+    df = sqlContext.createDataFrame(_createRDD, _createSchema)
+    df
+  }
+
+  def writeFile() {
+    _createDataFrame()
+    df.write.mode("overwrite").parquet(filename)
+  }
 }
