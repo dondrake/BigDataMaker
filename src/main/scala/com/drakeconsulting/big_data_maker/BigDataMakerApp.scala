@@ -27,28 +27,47 @@ import java.io.File
 
 object SimpleApp {
   def main(args: Array[String]) {
-    case class Config(outDir: File = new File("."))
+
+    case class Config(outDir: File = new File("."), numPartitions: Integer = 0, numRows: Integer = 0)
+
     val parser = new scopt.OptionParser[Config]("Big Data Maker") {
       head("Big Data Maker", "1.0")
       opt[File]('o', "outDir").required.action( (x,c) => c.copy(outDir = x) ).text("outDir is a directory")
+      opt[Int]('p', "numPartitions").action( (x,c) => c.copy(numPartitions = x) ).text("# of partitions")
+      opt[Int]('r', "numRows").action( (x,c) => c.copy(numRows = x) ).text("# of rows/partition")
     }
 
     var outDir = ""
+    var numPartitions: Integer = 0
+    var numRows: Integer = 0
+
     parser.parse(args, Config()) match {
       case Some(config) =>
         outDir = config.outDir.toString
+        numPartitions = config.numPartitions
+        numRows = config.numRows
 
       case None =>
         println("Oops.")
         System.exit(1)
     }
 
+    if (numPartitions == 0) {
+      numPartitions = 10
+    }
+    if (numRows == 0) {
+      numRows = 1000
+    }
+
     println("outDir=" + outDir)
+    println("numPartitions=" + numPartitions)
+    println("numRows=" + numRows)
+
     val conf = new SparkConf().setAppName("Big Data Maker Application")
     val sc = new SparkContext(conf)
     val sqlContext = new SQLContext(sc)
 
-    val bigData = new BigData(sqlContext, outDir, 10, 1000)
+    val bigData = new BigData(sqlContext, outDir, numPartitions, numRows)
     bigData.addColumn(new StringConstant("f1", "testing"))
     bigData.addColumn(new RandomLong("f2", 100000000000L))
     bigData.addColumn(new RandomLong("f3", 10000000000L))
