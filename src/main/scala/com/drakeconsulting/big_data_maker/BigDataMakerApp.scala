@@ -23,16 +23,15 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SQLContext
-import java.io.File
 
 object SimpleApp {
   def main(args: Array[String]) {
 
-    case class Config(outDir: File = new File("."), numPartitions: Integer = 0, numRows: Integer = 0)
+    case class Config(outDir: String = ".", numPartitions: Integer = 0, numRows: Integer = 0)
 
     val parser = new scopt.OptionParser[Config]("Big Data Maker") {
       head("Big Data Maker", "1.0")
-      opt[File]('o', "outDir").required.action( (x,c) => c.copy(outDir = x) ).text("outDir is a directory")
+      opt[String]('o', "outDir").required.action( (x,c) => c.copy(outDir = x) ).text("outDir is a directory")
       opt[Int]('p', "numPartitions").action( (x,c) => c.copy(numPartitions = x) ).text("# of partitions")
       opt[Int]('r', "numRows").action( (x,c) => c.copy(numRows = x) ).text("# of rows/partition")
     }
@@ -43,7 +42,7 @@ object SimpleApp {
 
     parser.parse(args, Config()) match {
       case Some(config) =>
-        outDir = config.outDir.toString
+        outDir = config.outDir
         numPartitions = config.numPartitions
         numRows = config.numRows
 
