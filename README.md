@@ -19,4 +19,11 @@ Look in BigDataMakerApp.scala for a complete example.  Here is a snippet:
 
     bigData.writeFile
 ```
-You need to specify the number of partitions (data files), and the number of rows to create per partition.  Each partition will be created in its own Spark container/thread, so the number of partitions will determine your parallelization.
+You need to specify the number of partitions (data files), and the number of rows to create per partition.  Each partition will be created in its own Spark container/thread, so the number of partitions will determine your parallelization.  The total number of rows created will be `numPartitions * numRows`.
+
+Then, just call `addColumn()` to add the different columns to the dataset.  The following column types are supported:
+
+- `StringConstant` - Same value for every row
+- `RandomLong` - Random Long value, from 0 to specified max value
+- `RandomDouble` Random Double value, from 0 to specified max value
+- `Categorical` - Random String from a provided List of Strings
