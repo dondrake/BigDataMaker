@@ -51,3 +51,10 @@ class RandomDouble(name: String, val maxValue:Double) extends AbstractCol(name, 
   }
 }
 
+class Categorical(name: String, val categories: List[String]) extends AbstractCol(name, StringType, nullable=false) {
+  val list: List[String] = categories
+
+  override def getValue(index: Integer): String = {
+    list(random.nextInt(list.length))
+  }
+}

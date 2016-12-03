@@ -66,6 +66,7 @@ object SimpleApp {
     val sc = new SparkContext(conf)
     val sqlContext = new SQLContext(sc)
 
+    val states = "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MT NE NV NH NJ NM NY NC ND OH OK OR MD MA MI MN MS MO PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" ").toList
     val bigData = new BigData(sqlContext, outDir, numPartitions, numRows)
     bigData.addColumn(new StringConstant("f1", "testing"))
     bigData.addColumn(new RandomLong("f2", 100000000000L))
@@ -74,6 +75,7 @@ object SimpleApp {
     bigData.addColumn(new RandomDouble("f5", 1000000000.0))
     bigData.addColumn(new RandomDouble("f6", 100000000.0))
     bigData.addColumn(new RandomDouble("f7", 10000000.0))
+    bigData.addColumn(new Categorical("states", states))
 
     bigData.writeFile
 
