@@ -2,19 +2,21 @@ name := "BigDataMaker"
 
 version := "1.0"
 
-scalaVersion := "2.10.6"
+scalaVersion := "2.11.12"
 
-val sparkVersion = "1.6.2"
+val sparkVersion = "2.4.4"
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
 
-libraryDependencies += "com.github.scopt" %% "scopt" % "3.5.0"
+libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.1"
 
 
 //test
-libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "1.6.1_0.3.3" % "test"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.4.3_0.12.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+
+scalacOptions += "-target:jvm-1.8"
 
 resolvers += Resolver.sonatypeRepo("public")
 
