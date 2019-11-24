@@ -67,7 +67,8 @@ object SimpleApp {
     val sqlContext = new SQLContext(sc)
 
     val states = "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MT NE NV NH NJ NM NY NC ND OH OK OR MD MA MI MN MS MO PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" ").toList
-    val bigData = new BigData(sqlContext, outDir, numPartitions, numRows)
+    val randomStrings = "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".split(" ").toList
+     val bigData = new BigData(sqlContext, outDir, numPartitions, numRows)
     bigData.addColumn(new StringConstant("f1", "testing"))
     bigData.addColumn(new RandomLong("f2", 100000000000L))
     bigData.addColumn(new RandomLong("f3", 10000000000L))
@@ -76,6 +77,7 @@ object SimpleApp {
     bigData.addColumn(new RandomDouble("f6", 100000000.0))
     bigData.addColumn(new RandomDouble("f7", 10000000.0))
     bigData.addColumn(new Categorical("states", states))
+    bigData.addColumn(new Categorical("random_string", randomStrings))
 
     bigData.writeFile
 
